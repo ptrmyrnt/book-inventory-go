@@ -4,6 +4,7 @@ import (
 	"book-inventory-go/app"
 	"book-inventory-go/auth"
 	"book-inventory-go/db"
+	"book-inventory-go/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,7 +23,7 @@ func main() {
 	router.GET("/", auth.HomeHandler)
 
 	// get all books
-	router.GET("/books", handler.GetBooks)
+	router.GET("/books", middleware.AuthValid, handler.GetBooks)
 
 	// login
 	router.GET("/login", auth.LoginGetHandler)
