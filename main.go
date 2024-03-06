@@ -25,6 +25,9 @@ func main() {
 	// get all books
 	router.GET("/books", middleware.AuthValid, handler.GetBooks)
 
+	// detail book
+	router.GET("/book/:id", middleware.AuthValid, handler.GetBookById)
+
 	// login
 	router.GET("/login", auth.LoginGetHandler)
 	router.POST("/login", auth.LoginPostHandler)

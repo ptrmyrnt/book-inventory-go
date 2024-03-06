@@ -31,7 +31,7 @@ func AuthValid(c *gin.Context) {
 		fmt.Println("token verified")
 		c.Next()
 	} else {
-		c.HTML(http.StatusUnauthorized, "login.html", gin.H{"content": "Invalid Token"})
+		c.HTML(http.StatusUnauthorized, "login.html", gin.H{"content": "Token is expired"})
 		c.Abort()
 	}
 }
