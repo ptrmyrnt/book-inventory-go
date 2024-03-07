@@ -4,7 +4,7 @@
 
 <section class="section">
   {{if .payload}}
-  <form action="/updateBook/{{.payload.ID}}" method="post">
+  <form action="/update-book/{{.payload.ID}}" method="post">
     {{else}}
     <form action="/book" method="post">
       {{end}}

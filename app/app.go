@@ -24,6 +24,7 @@ func (h *Handler) GetBooks(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", gin.H{
 		"title":   "Home Page",
 		"payload": books,
+		"auth":    c.Query("auth"),
 	})
 }
 
@@ -55,5 +56,48 @@ func (h *Handler) PostBook(c *gin.Context) {
 
 	c.Bind(&books)
 	h.DB.Create(&books)
+	c.Redirect(http.StatusMovedPermanently, fmt.Sprintf("/books?auth=%s", c.PostForm("auth")))
+}
+
+func (h *Handler) UpdateBook(c *gin.Context) {
+	var books models.Books
+	bookId := c.Param("id")
+
+	if h.DB.Find(&books, "id=?", bookId).RecordNotFound() {
+		c.HTML(http.StatusInternalServerError, "error.html", gin.H{
+			"error": "Not Found!",
+		})
+	}
+
+	c.HTML(http.StatusOK, "formBook.html", gin.H{
+		"title":   "Update Book",
+		"payload": books,
+		"auth":    c.Query("auth"),
+	})
+}
+
+func (h *Handler) PutBook(c *gin.Context) {
+	var books models.Books
+	bookId := c.Param("id")
+
+	if h.DB.Find(&books, "id=?", bookId).RecordNotFound() {
+		c.HTML(http.StatusInternalServerError, "error.html", gin.H{
+			"error": "Not Found!",
+		})
+	}
+
+	var reqBook = books
+	c.Bind(&reqBook)
+
+	h.DB.Model(&books).Where("id=?", bookId).Update(reqBook)
+	c.Redirect(http.StatusMovedPermanently, fmt.Sprintf("/book/%s?auth=%s", bookId, c.PostForm("auth")))
+}
+
+func (h *Handler) DeleteBook(c *gin.Context) {
+	var books models.Books
+
+	bookId := c.Param("id")
+	h.DB.Delete(&books, "id=?", bookId)
+
 	c.Redirect(http.StatusMovedPermanently, fmt.Sprintf("/books?auth=%s", c.PostForm("auth")))
 }

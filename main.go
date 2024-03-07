@@ -28,6 +28,17 @@ func main() {
 	// detail book
 	router.GET("/book/:id", middleware.AuthValid, handler.GetBookById)
 
+	// add book
+	router.GET("/add-book", middleware.AuthValid, handler.AddBook)
+	router.POST("/book", middleware.AuthValid, handler.PostBook)
+
+	// update book
+	router.GET("/update-book/:id", middleware.AuthValid, handler.UpdateBook)
+	router.POST("/update-book/:id", middleware.AuthValid, handler.PutBook)
+
+	// delete book
+	router.POST("/delete-book/:id", middleware.AuthValid, handler.DeleteBook)
+
 	// login
 	router.GET("/login", auth.LoginGetHandler)
 	router.POST("/login", auth.LoginPostHandler)
